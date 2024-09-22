@@ -1,14 +1,15 @@
 from __future__ import annotations
 import cmudict
-import itertools
 from pathlib import Path
 
 class Bee:
+    bid: str
     centre: str
     surround: str
     letters: set[str]
 
-    def __init__(self: Bee, centre: str, surround: str) -> None:
+    def __init__(self: Bee, bid: str, centre: str, surround: str) -> None:
+        self.bid = bid
         self.centre, self.surround = centre, surround
         self.letters = {self.centre}.union(set(self.surround))
 
@@ -28,7 +29,7 @@ class Bee:
     def from_path(path: Path) -> Bee:
         with open(path, 'r') as f:
             c, s = f.read().strip().upper().split('::')
-            return Bee(c, s)
+            return Bee(path.stem, c, s)
         
     def __repr__(self: Bee) -> str:
         return f'{self.centre}::{self.surround}'
@@ -40,6 +41,6 @@ def get_latest_path() -> None:
     return get_paths()[-1]
 
 if __name__ == '__main__':
-    b = Bee.from_path(get_latest_path())
-    print(len(b.get_usable_words()))
-    print(b.get_pangrams())
+    for path in get_paths():
+        b = Bee.from_path(path)
+        print(f'{b.bid} : {b.get_pangrams()}')
