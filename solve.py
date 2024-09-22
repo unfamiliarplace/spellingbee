@@ -6,15 +6,23 @@ from pathlib import Path
 class Bee:
     centre: str
     surround: str
+    letters: set[str]
 
     def __init__(self: Bee, centre: str, surround: str) -> None:
         self.centre, self.surround = centre, surround
+        self.letters = {self.centre}.union(set(self.surround))
 
-    def letters(self: Bee) -> str:
-        return self.centre, self.surround
+    def is_usable_word(self: Bee, s: str) -> bool:
+        return (self.centre in s) and (all(c in self.letters for c in s))
+    
+    def get_usable_words(self: Bee) -> set[str]:
+        return set(filter(lambda w: self.is_usable_word(w), (w.upper() for w in cmudict.words())))
 
-    def longest(self: Bee) -> str:
-        pass
+    def is_pangram(self: Bee, s: str) -> bool:
+        return set(s) == self.letters
+
+    def get_pangrams(self: Bee) -> set[str]:
+        return set(filter(lambda w: self.is_pangram(w), self.get_usable_words()))
 
     @staticmethod
     def from_path(path: Path) -> Bee:
@@ -33,4 +41,5 @@ def get_latest_path() -> None:
 
 if __name__ == '__main__':
     b = Bee.from_path(get_latest_path())
-    print(b.longest())
+    print(len(b.get_usable_words()))
+    print(b.get_pangrams())
