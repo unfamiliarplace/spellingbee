@@ -36,10 +36,10 @@ class Bee:
         return f'{self.centre}::{self.surround}'
 
 def get_paths() -> None:
-    return sorted(Path('./data/').glob('*.txt'))
+    return sorted(Path('./data/').glob('*.txt'), reverse=True)
 
 def get_latest_path() -> None:
-    return get_paths()[-1]
+    return get_paths()[0]
 
 def get_base_dictionaries() -> set[str]:
     words = set()
@@ -47,7 +47,10 @@ def get_base_dictionaries() -> set[str]:
     words = words.union(set(str(s).upper() for s in nltk_words.words()))
     return words
 
-if __name__ == '__main__':
+def print_all_pangrams() -> None:
     for path in get_paths():
         b = Bee.from_path(path)
         print(f'{b.bid} : {b.get_pangrams()}')
+
+if __name__ == '__main__':
+    print_all_pangrams()
