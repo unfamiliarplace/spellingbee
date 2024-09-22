@@ -43,8 +43,8 @@ def get_latest_path() -> None:
 
 def get_base_dictionaries() -> set[str]:
     words = set()
-    words = words.union(set(s.upper() for s in cmudict.words()))
-    words = words.union(set(str(s).upper() for s in nltk_words.words()))
+    words |= set(s.upper() for s in cmudict.words())
+    words |= set(str(s).upper() for s in nltk_words.words())
     return words
 
 def print_all_pangrams() -> None:
