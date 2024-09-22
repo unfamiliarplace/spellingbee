@@ -50,7 +50,8 @@ def get_base_dictionaries() -> set[str]:
 def print_all_pangrams() -> None:
     for path in get_paths():
         b = Bee.from_path(path)
-        print(f'{b.bid} : {b.get_pangrams()}')
+        print(f'{b.bid} : ', end='')
+        print(' ; '.join(b.get_pangrams()))
 
 if __name__ == '__main__':
     print_all_pangrams()
