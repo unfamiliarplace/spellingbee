@@ -1,6 +1,7 @@
 from __future__ import annotations
 import cmudict
 from pathlib import Path
+from nltk.corpus import words as nltk_words
 
 class Bee:
     bid: str
@@ -17,7 +18,7 @@ class Bee:
         return (self.centre in s) and (all(c in self.letters for c in s))
     
     def get_usable_words(self: Bee) -> set[str]:
-        return set(filter(lambda w: self.is_usable_word(w), (w.upper() for w in cmudict.words())))
+        return set(filter(lambda w: self.is_usable_word(w), get_base_dictionaries()))
 
     def is_pangram(self: Bee, s: str) -> bool:
         return set(s) == self.letters
@@ -39,6 +40,12 @@ def get_paths() -> None:
 
 def get_latest_path() -> None:
     return get_paths()[-1]
+
+def get_base_dictionaries() -> set[str]:
+    words = set()
+    words = words.union(set(s.upper() for s in cmudict.words()))
+    words = words.union(set(str(s).upper() for s in nltk_words.words()))
+    return words
 
 if __name__ == '__main__':
     for path in get_paths():
